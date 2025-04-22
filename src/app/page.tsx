@@ -8,29 +8,40 @@ export default function Home() {
 
   const [board, setBoard] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 2, 0],
+    [0, 0, 0, 1, 2, 0, 2, 0],
     [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 2, 0, 0, 2, 0],
+    [0, 0, 0, 0, 2, 0, 2, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
     const newBoard = structuredClone(board);
 
-    if (board[y + 1] !== undefined && board[y + 1][x] === 3 - turnColor) {
-      if (board[y + 2] !== undefined && board[y + 2][x] === turnColor) {
-        newBoard[y][x] = turnColor;
-        for (let i = 1; i < 8; i++) {
-          if (board[y + i] !== undefined && board[y + i][x] === 3 - turnColor) {
-            newBoard[y + i][x] = turnColor;
-          }
-        }
+    let i = 1;
+    while (board[y + i] !== undefined && board[y + i][x] === 3 - turnColor) {
+      i++;
+    }
+    if (i > 1 && board[y + i] !== undefined && board[y + i][x] === turnColor) {
+      newBoard[y][x] = turnColor;
+      for (let k = 1; k < i; k++) {
+        newBoard[y + k][x] = turnColor;
       }
       setTurnColor(3 - turnColor);
     }
+    while (board[y - i] !== undefined && board[y - i][x] === 3 - turnColor) {
+      i++;
+    }
+    if (i > 1 && board[y - i] !== undefined && board[y - i][x] === turnColor) {
+      newBoard[y][x] = turnColor;
+      for (let k = 1; k < i; k++) {
+        newBoard[y - k][x] = turnColor;
+      }
+      setTurnColor(3 - turnColor);
+    }
+
     setBoard(newBoard);
   };
   return (
