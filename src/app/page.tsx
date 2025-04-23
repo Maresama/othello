@@ -20,6 +20,9 @@ export default function Home() {
     console.log(x, y);
     const newBoard = structuredClone(board);
 
+    let flipped = false; //裏返っていないならfalse
+
+    //下方向
     let i = 1;
     while (
       board[y + i] !== undefined &&
@@ -38,7 +41,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y + k][x] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
 
     // 上方向
@@ -60,7 +63,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y - k][x] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
 
     // 右方向
@@ -82,7 +85,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y][x + k] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
 
     // 左方向
@@ -104,7 +107,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y][x - k] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
     //左上
     i = 1;
@@ -125,7 +128,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y - k][x - k] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
     //右上
     i = 1;
@@ -146,7 +149,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y - k][x + k] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
     //左下
     i = 1;
@@ -167,7 +170,7 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y + k][x - k] = turnColor;
       }
-      setTurnColor(3 - turnColor);
+      flipped = true; // ← 石を裏返せたら true
     }
     //右下
     i = 1;
@@ -188,8 +191,12 @@ export default function Home() {
       for (let k = 1; k < i; k++) {
         newBoard[y + k][x + k] = turnColor;
       }
+      flipped = true; // ← 石を裏返せたら true
+    }
+    if (flipped) {
       setTurnColor(3 - turnColor);
     }
+
     setBoard(newBoard);
   };
   return (
