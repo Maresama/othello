@@ -31,9 +31,22 @@ export default function Home() {
       [0, 1], //右
       [-1, 1], //右下
     ];
-    const flipped = false;
+    const Flipped = false;
     for (let i = 0; i < directions.length; i++) {
       const [dy, dx] = directions[i];
+      const toFlip: [number, number][] = [];
+      let cy = y + dy;
+      let cx = x + dx;
+      while (3 - turnColor) {
+        toFlip.push([cy, cx]);
+        cy += dy;
+        cx += dx;
+      }
+    }
+    if (Flipped) {
+      newBoard[y][x] = turnColor;
+      setBoard(newBoard);
+      setTurnColor(3 - turnColor);
     }
   };
 
