@@ -18,21 +18,25 @@ export default function Home() {
   ]);
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
+    if (board[y][x] !== 0) return; //石が置かれていなかったら何もしない
+
     const newBoard = structuredClone(board);
-
     const directions = [
-      [1, 0],
-      [-1, -1],
-      [0, -1],
-      [1, -1],
-      [1, 0],
-      [1, 1],
-      [0, 1],
-      [-1, 1],
+      [1, 0], //下
+      [-1, 0], //上
+      [0, -1], //左
+      [1, -1], //左下
+      [-1, -1], //左上
+      [1, 1], //右上
+      [0, 1], //右
+      [-1, 1], //右下
     ];
-
-    setBoard(newBoard);
+    const flipped = false;
+    for (let i = 0; i < directions.length; i++) {
+      const [dy, dx] = directions[i];
+    }
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.board}>
