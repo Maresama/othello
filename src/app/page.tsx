@@ -37,7 +37,7 @@ export default function Home() {
       const toFlip: [number, number][] = [];
       let cy = y + dy;
       let cx = x + dx;
-      while (3 - turnColor) {
+      while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && newBoard[cy][cx] === 3 - turnColor) {
         toFlip.push([cy, cx]);
         cy += dy;
         cx += dx;
@@ -50,8 +50,8 @@ export default function Home() {
         newBoard[cy][cx] === turnColor &&
         toFlip.length > 0
       ) {
-        for (let j = 0; j < toFlip.length; j++) {
-          const [fx, fy] = toFlip[j];
+        for (let k = 0; k < toFlip.length; k++) {
+          const [fy, fx] = toFlip[k];
           newBoard[fy][fx] = turnColor;
         }
         Flipped = true;
