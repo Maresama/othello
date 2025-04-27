@@ -32,3 +32,11 @@
   background: white;
   border-radius: 50%;
 }
+
+.shade {
+  width: 30px;
+  height: 30px;
+  margin: 13px auto;
+  background-color: grey;
+  border-radius: 50%;
+}

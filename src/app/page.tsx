@@ -18,7 +18,7 @@ export default function Home() {
   ]);
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
-    if (board[y][x] !== 0) return; //石が置かれていなかったら何もしない
+    if (board[y][x] !== 0) return; //石が置かれていたら何もしない
 
     const newBoard = structuredClone(board);
     const directions = [
@@ -34,7 +34,7 @@ export default function Home() {
     let Flipped = false;
     for (let i = 0; i < directions.length; i++) {
       const [dy, dx] = directions[i];
-      const toFlip: [number, number][] = [];
+      const toFlip: [number, number][] = []; //裏返せそうな石の座標を保存
       let cy = y + dy;
       let cx = x + dx;
       while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && newBoard[cy][cx] === 3 - turnColor) {
@@ -71,10 +71,9 @@ export default function Home() {
           row.map((color, x) => (
             <div className={styles.cell} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
               {color !== 0 && (
-                <div
-                  className={styles.stone}
-                  style={{ background: color === 1 ? '#000' : '#fff' }}
-                />
+                <div className={styles.stone} style={{ background: color === 1 ? '#000' : '#fff' }}>
+                  <div className={styles.shade} />
+                </div>
               )}
             </div>
           )),
