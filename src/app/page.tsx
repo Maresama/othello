@@ -31,7 +31,7 @@ export default function Home() {
       [0, 1], //右
       [-1, 1], //右下
     ];
-    const Flipped = false;
+    let Flipped = false;
     for (let i = 0; i < directions.length; i++) {
       const [dy, dx] = directions[i];
       const toFlip: [number, number][] = [];
@@ -41,6 +41,20 @@ export default function Home() {
         toFlip.push([cy, cx]);
         cy += dy;
         cx += dx;
+      }
+      if (
+        cx >= 0 &&
+        cx < 8 &&
+        cy >= 0 &&
+        cy < 8 &&
+        newBoard[cy][cx] === turnColor &&
+        toFlip.length > 0
+      ) {
+        for (let j = 0; j < toFlip.length; j++) {
+          const [fx, fy] = toFlip[j];
+          newBoard[fy][fx] = turnColor;
+        }
+        Flipped = true;
       }
     }
     if (Flipped) {
