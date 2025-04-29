@@ -40,3 +40,10 @@
   background-color: grey;
   border-radius: 50%;
 }
+
+.score {
+  margin-bottom: 10px;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+}

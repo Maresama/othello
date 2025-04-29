@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -16,6 +16,9 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+
+  const [blackCount, setBlackCount] = useState(2);
+  const [whiteCount, setWhiteCount] = useState(2);
   const directions = [
     [1, 0], //下
     [-1, 0], //上
@@ -98,6 +101,21 @@ export default function Home() {
     }
   };
 
+  const updateScore = (b: number[][]) => {
+    let black = 0,
+      white = 0;
+    for (const row of b) {
+      for (const cell of row) {
+        if (cell === 1) black++;
+        if (cell === 2) white++;
+      }
+    }
+    setBlackCount(black);
+    setWhiteCount(white);
+  };
+  useEffect(() => {
+    updateScore(board); // boardが更新されるたびに得点を更新
+  }, [board]);
   return (
     <div className={styles.container}>
       <div className={styles.board}>
