@@ -11,8 +11,8 @@
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: 640px;
-  height: 640px;
+  width: 560px;
+  height: 560px;
   text-align: center;
   background-color: rgb(11 66 18);
 }
@@ -21,14 +21,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   border: 2px solid #000;
 }
 
 .stone {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   background: white;
   border-radius: 50%;
 }
