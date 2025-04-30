@@ -116,8 +116,12 @@ export default function Home() {
   useEffect(() => {
     updateScore(board); // boardが更新されるたびに得点を更新
   }, [board]);
+
   return (
     <div className={styles.container}>
+      <div className={styles.score}>
+        <span>黒: {blackCount}</span> | <span>白: {whiteCount}</span>
+      </div>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
