@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -19,16 +19,47 @@ export default function Home() {
 
   const [blackCount, setBlackCount] = useState(2);
   const [whiteCount, setWhiteCount] = useState(2);
-  const directions = [
-    [1, 0], //下
-    [-1, 0], //上
-    [0, -1], //左
-    [1, -1], //左下
-    [-1, -1], //左上
-    [1, 1], //右上
-    [0, 1], //右
-    [-1, 1], //右下
-  ];
+  const [validMoves, setvalidMoves] = useState<number[][]>([]);
+  const directions = useMemo(
+    () => [
+      [1, 0], //下
+      [-1, 0], //上
+      [0, -1], //左
+      [1, -1], //左下
+      [-1, -1], //左上
+      [1, 1], //右上
+      [0, 1], //右
+      [-1, 1], //右下
+    ],
+    [],
+  );
+  const updatevalidMoves = useCallback(
+    (board: number[][], color: number) => {
+      const moves: number[][] = [];
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          if (board[y][x] !== 0) continue;
+          for (let i = 0; i < directions.length; i++) {
+            const [dy, dx] = directions[i];
+            let cy = y + dy;
+            let cx = x + dx;
+            let hasOpponent = false;
+            while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === 3 - color) {
+              hasOpponent = true;
+              cy += dy;
+              cx += dx;
+            }
+            if (hasOpponent && cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === color) {
+              moves.push([y, x]);
+              break;
+            }
+          }
+        }
+      }
+      setvalidMoves(moves);
+    },
+    [directions],
+  );
 
   const canPlace = (board: number[][], color: number) => {
     for (let y = 0; y < 8; y++) {
@@ -113,9 +144,11 @@ export default function Home() {
     setBlackCount(black);
     setWhiteCount(white);
   };
+
   useEffect(() => {
-    updateScore(board); // boardが更新されるたびに得点を更新
-  }, [board]);
+    updateScore(board); // 得点
+    updatevalidMoves(board, turnColor); // 候補地
+  }, [board, turnColor, updatevalidMoves]);
 
   return (
     <div className={styles.container}>
@@ -128,16 +161,21 @@ export default function Home() {
       </div>
       <div className={styles.board}>
         {board.map((row, y) =>
-          row.map((color, x) => (
-            <div className={styles.cell} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
-              {color !== 0 && (
-                <div
-                  className={styles.stone}
-                  style={{ background: color === 1 ? '#000' : '#fff' }}
-                />
-              )}
-            </div>
-          )),
+          row.map((color, x) => {
+            const isValidMove = validMoves.some(([vy, vx]) => vy === y && vx === x);
+            return (
+              <div className={styles.cell} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
+                {color !== 0 ? (
+                  <div
+                    className={styles.stone}
+                    style={{ background: color === 1 ? '#000' : '#fff' }}
+                  />
+                ) : isValidMove ? (
+                  <div className={styles.shade} />
+                ) : null}
+              </div>
+            );
+          }),
         )}
       </div>
     </div>
