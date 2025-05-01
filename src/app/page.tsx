@@ -20,6 +20,8 @@ export default function Home() {
   const [blackCount, setBlackCount] = useState(2);
   const [whiteCount, setWhiteCount] = useState(2);
   const [validMoves, setvalidMoves] = useState<number[][]>([]);
+  const [message, setMessage] = useState('');
+
   const directions = useMemo(
     () => [
       [1, 0], //下
@@ -120,14 +122,15 @@ export default function Home() {
       newBoard[y][x] = turnColor;
       setBoard(newBoard);
       const nextColor = 3 - turnColor;
+
       if (canPlace(newBoard, nextColor)) {
         setTurnColor(nextColor);
+        setMessage(''); // メッセージ消す
       } else if (canPlace(newBoard, turnColor)) {
-        alert(`${nextColor === 1 ? '黒' : '白'}は置けないのでスキップします`);
-        setTurnColor(turnColor); //自分のターン継続
+        setMessage(`%c${nextColor === 1 ? '黒' : '白'}は置けないのでスキップします`);
+        setTurnColor(turnColor);
       } else {
-        alert('どちらも置けないのでゲーム終了');
-        // ゲーム終了処理が必要ならここで追加
+        setMessage('どちらも置けないのでゲーム終了');
       }
     }
   };
@@ -159,6 +162,7 @@ export default function Home() {
           <p>白- {whiteCount}</p>
         </div>
       </div>
+      {message && <div className={styles.message}>{message}</div>}
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => {

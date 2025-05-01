@@ -60,3 +60,15 @@
   border: 6px solid #000;
   border-radius: 10px;
 }
+
+.message {
+  padding: 12px 20px;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(to right, #333, #555);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 30%);
+  animation: fadeIn 0.5s ease;
+}
