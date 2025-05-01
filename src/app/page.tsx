@@ -119,8 +119,12 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.score}>
-        <span>黒: {blackCount}</span> | <span>白: {whiteCount}</span>
+      <div className={styles.box}>
+        <div className={styles.score}>
+          <p>SCORE</p>
+          <p>黒- {blackCount}</p>
+          <p>白- {whiteCount}</p>
+        </div>
       </div>
       <div className={styles.board}>
         {board.map((row, y) =>

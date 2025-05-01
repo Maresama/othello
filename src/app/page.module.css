@@ -11,8 +11,8 @@
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: 560px;
-  height: 560px;
+  width: 640px;
+  height: 640px;
   text-align: center;
   background-color: rgb(11 66 18);
 }
@@ -21,14 +21,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   border: 2px solid #000;
 }
 
 .stone {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   background: white;
   border-radius: 50%;
 }
@@ -46,4 +46,17 @@
   font-size: 40px;
   font-weight: bold;
   text-align: center;
+}
+
+.box {
+  position: absolute;
+  top: 200px;
+  left: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 260px;
+  border: 6px solid #000;
+  border-radius: 10px;
 }
