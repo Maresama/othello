@@ -17,6 +17,14 @@
   background-color: rgb(11 66 18);
 }
 
+@media (width <= 600px) {
+  .board {
+    grid-template-rows: repeat(8, 30px);
+    grid-template-columns: repeat(8, 30px);
+    gap: 1px;
+  }
+}
+
 .cell {
   display: flex;
   align-items: center;
@@ -48,6 +56,12 @@
   text-align: center;
 }
 
+@media (width <= 600px) {
+  .score {
+    font-size: 14px;
+  }
+}
+
 .box {
   position: absolute;
   top: 200px;
@@ -62,13 +76,23 @@
 }
 
 .message {
-  padding: 12px 20px;
+  position: absolute;
+  top: 100px;
+  left: 200px;
+  padding: 25px 50px;
   margin: 10px 0;
   font-weight: bold;
-  color: #fff;
+  color: #ef0;
   text-align: center;
-  background: linear-gradient(to right, #333, #555);
+  background: linear-gradient(to right, #2b530a, #227409);
   border-radius: 8px;
   box-shadow: 0 0 10px rgb(0 0 0 / 30%);
   animation: fadeIn 0.5s ease;
+}
+
+@media (width <= 600px) {
+  .message {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }

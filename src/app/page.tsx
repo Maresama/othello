@@ -130,7 +130,7 @@ export default function Home() {
         setMessage(`%c${nextColor === 1 ? '黒' : '白'}は置けないのでスキップします`);
         setTurnColor(turnColor);
       } else {
-        setMessage('どちらも置けないのでゲーム終了');
+        setMessage('ゲーム終了');
       }
     }
   };
