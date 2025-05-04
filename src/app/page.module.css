@@ -10,7 +10,7 @@
 }
 
 /* スコアボックス（ボードの外に表示） */
-.scoreBox {
+.box {
   padding: 1rem 2rem;
   margin-bottom: 1rem;
   color: white;
