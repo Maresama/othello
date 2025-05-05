@@ -153,12 +153,30 @@ export default function Home() {
     updatevalidMoves(board, turnColor); // 候補地
   }, [board, turnColor, updatevalidMoves]);
 
+  const resetGame = () => {
+    setBoard([
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 1, 0, 0, 0],
+      [0, 0, 0, 1, 2, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+    setTurnColor(1);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.scoreBox}>
         <p>SCORE</p>
-        <p>黒- {blackCount}</p>
-        <p>白- {whiteCount}</p>
+        <span>
+          黒- {blackCount}
+          白- {whiteCount}
+        </span>
+        <button className={styles.resetButton} onClick={resetGame}>
+          リセット
+        </button>
       </div>
 
       {message && <div className={styles.message}>{message}</div>}

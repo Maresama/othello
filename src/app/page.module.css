@@ -73,3 +73,25 @@
     font-size: 1.2rem;
   }
 }
+
+.resetButton {
+  padding: 8px 16px;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  background-color: #227409;
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+@media (width <= 600px) {
+  .resetButton {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
