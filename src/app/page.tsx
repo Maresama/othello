@@ -87,51 +87,58 @@ export default function Home() {
   };
 
   const clickHandler = (x: number, y: number) => {
-    console.log(x, y);
-    if (board[y][x] !== 0) return; //石が置かれていたら何もしない
+    if (board[y][x] !== 0) return;
 
     const newBoard = structuredClone(board);
 
-    let Flipped = false;
-    for (let i = 0; i < directions.length; i++) {
-      const [dy, dx] = directions[i];
-      const toFlip: [number, number][] = []; //裏返せそうな石の座標を保存
-      let cy = y + dy;
-      let cx = x + dx;
-      while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && newBoard[cy][cx] === 3 - turnColor) {
-        toFlip.push([cy, cx]);
-        cy += dy;
-        cx += dx;
-      }
-      if (
-        cx >= 0 &&
-        cx < 8 &&
-        cy >= 0 &&
-        cy < 8 &&
-        newBoard[cy][cx] === turnColor &&
-        toFlip.length > 0
-      ) {
-        for (let k = 0; k < toFlip.length; k++) {
-          const [fy, fx] = toFlip[k];
-          newBoard[fy][fx] = turnColor;
-        }
-        Flipped = true;
-      }
-    }
-    if (Flipped) {
-      newBoard[y][x] = turnColor;
-      setBoard(newBoard);
-      const nextColor = 3 - turnColor;
+    // directions すべてに対して裏返す候補の石を収集
+    const allFlips = directions
+      .map(([dy, dx]) => {
+        const toFlip: [number, number][] = [];
+        let cy = y + dy;
+        let cx = x + dx;
 
-      if (canPlace(newBoard, nextColor)) {
-        setTurnColor(nextColor);
-        setMessage(''); // メッセージ消す
-      } else if (canPlace(newBoard, turnColor)) {
-        setMessage(`%c${nextColor === 1 ? '黒' : '白'}は置けないのでスキップします`);
-        setTurnColor(turnColor);
-      } else {
-        setMessage('ゲーム終了');
-      }
+        while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && newBoard[cy][cx] === 3 - turnColor) {
+          toFlip.push([cy, cx]);
+          cy += dy;
+          cx += dx;
+        }
+
+        if (
+          cx >= 0 &&
+          cx < 8 &&
+          cy >= 0 &&
+          cy < 8 &&
+          newBoard[cy][cx] === turnColor &&
+          toFlip.length > 0
+        ) {
+          return toFlip;
+        }
+
+        return []; // 裏返せない場合は空
+      })
+      .flat(); // 二次元配列を平坦化
+
+    if (allFlips.length === 0) return; // 裏返す石がなければ無視
+
+    // 裏返す
+    allFlips.forEach(([fy, fx]) => {
+      newBoard[fy][fx] = turnColor;
+    });
+
+    // 自分の石を置く
+    newBoard[y][x] = turnColor;
+    setBoard(newBoard);
+
+    const nextColor = 3 - turnColor;
+    if (canPlace(newBoard, nextColor)) {
+      setTurnColor(nextColor);
+    } else if (canPlace(newBoard, turnColor)) {
+      alert(`${nextColor === 1 ? '黒' : '白'}は置けないのでスキップします`);
+      // 自分のターン継続
+      setTurnColor(turnColor);
+    } else {
+      alert('どちらも置けないのでゲーム終了');
     }
   };
 
