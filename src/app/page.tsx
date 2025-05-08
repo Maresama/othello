@@ -64,26 +64,25 @@ export default function Home() {
   );
 
   const canPlace = (board: number[][], color: number) => {
-    for (let y = 0; y < 8; y++) {
-      for (let x = 0; x < 8; x++) {
-        if (board[y][x] !== 0) continue;
-        for (let i = 0; i < directions.length; i++) {
-          const [dy, dx] = directions[i];
+    return board
+      .flatMap((row, y) => row.map((cell, x) => ({ x, y, cell })))
+      .some(({ x, y, cell }) => {
+        if (cell !== 0) return false;
+
+        return directions.some(([dy, dx]) => {
           let cy = y + dy;
           let cx = x + dx;
           let hasOpponent = false;
+
           while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === 3 - color) {
             hasOpponent = true;
             cy += dy;
             cx += dx;
           }
-          if (hasOpponent && cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === color) {
-            return true; // 置ける場所が見つかった
-          }
-        }
-      }
-    }
-    return false; // どこにも置けない
+
+          return hasOpponent && cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === color;
+        });
+      });
   };
 
   const clickHandler = (x: number, y: number) => {
