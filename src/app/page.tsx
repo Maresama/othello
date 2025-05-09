@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import styles from './page.module.css';
 
 const calcBlackCount = (b: number[][]) => {
@@ -21,6 +21,46 @@ const calcWhiteCount = (b: number[][]) => {
   }
   return white;
 };
+
+const boardWithCandidates = (
+  board: number[][],
+  candidateBoard: number[][],
+  color: number,
+): number[][] => {
+  const directions = [
+    [1, 0], //下
+    [-1, 0], //上
+    [0, -1], //左
+    [1, -1], //左下
+    [-1, -1], //左上
+    [1, 1], //右上
+    [0, 1], //右
+    [-1, 1], //右下
+  ];
+
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      if (board[y][x] !== 0) continue;
+      for (let i = 0; i < directions.length; i++) {
+        const [dy, dx] = directions[i];
+        let cy = y + dy;
+        let cx = x + dx;
+        let hasOpponent = false;
+        while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === color) {
+          hasOpponent = true;
+          cy += dy;
+          cx += dx;
+        }
+        if (hasOpponent && cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === 3 - color) {
+          candidateBoard[y][x] = 3;
+          break;
+        }
+      }
+    }
+  }
+  return candidateBoard;
+};
+
 export default function Home() {
   const [turnColor, setTurnColor] = useState(1);
 
@@ -34,52 +74,23 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-
+  const newBoard = structuredClone(board);
+  const candidateBoard = structuredClone(board);
   const blackCount = calcBlackCount(board);
   const whiteCount = calcWhiteCount(board);
-  const [validMoves, setvalidMoves] = useState<number[][]>([]);
+  const [validMoves] = useState<number[][]>([]);
   const [message, setMessage] = useState('');
 
-  const directions = useMemo(
-    () => [
-      [1, 0], //下
-      [-1, 0], //上
-      [0, -1], //左
-      [1, -1], //左下
-      [-1, -1], //左上
-      [1, 1], //右上
-      [0, 1], //右
-      [-1, 1], //右下
-    ],
-    [],
-  );
-  const updatevalidMoves = useCallback(
-    (board: number[][], color: number) => {
-      const moves: number[][] = [];
-      for (let y = 0; y < 8; y++) {
-        for (let x = 0; x < 8; x++) {
-          if (board[y][x] !== 0) continue;
-          for (let i = 0; i < directions.length; i++) {
-            const [dy, dx] = directions[i];
-            let cy = y + dy;
-            let cx = x + dx;
-            let hasOpponent = false;
-            while (cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === 3 - color) {
-              hasOpponent = true;
-              cy += dy;
-              cx += dx;
-            }
-            if (hasOpponent && cx >= 0 && cx < 8 && cy >= 0 && cy < 8 && board[cy][cx] === color) {
-              moves.push([y, x]);
-              break;
-            }
-          }
-        }
-      }
-      setvalidMoves(moves);
-    },
-    [directions],
-  );
+  const directions = [
+    [1, 0], //下
+    [-1, 0], //上
+    [0, -1], //左
+    [1, -1], //左下
+    [-1, -1], //左上
+    [1, 1], //右上
+    [0, 1], //右
+    [-1, 1], //右下
+  ];
 
   const canPlace = (board: number[][], color: number) => {
     return board
@@ -104,10 +115,9 @@ export default function Home() {
   };
 
   const clickHandler = (x: number, y: number) => {
-    if (board[y][x] !== 0) return;
+    console.log(board);
 
-    const newBoard = structuredClone(board);
-
+    if (board[y][x] % 3 !== 0) return;
     // directions すべてに対して裏返す候補の石を収集
     const allFlips = directions
       .map(([dy, dx]) => {
@@ -159,11 +169,6 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    // 得点
-    updatevalidMoves(board, turnColor); // 候補地
-  }, [board, turnColor, updatevalidMoves]);
-
   const resetGame = () => {
     setBoard([
       [0, 0, 0, 0, 0, 0, 0, 0],
@@ -192,19 +197,31 @@ export default function Home() {
 
       {message && <div className={styles.message}>{message}</div>}
       <div className={styles.board}>
-        {board.map((row, y) =>
+        {boardWithCandidates(board, candidateBoard, 3 - turnColor).map((row, y) =>
           row.map((color, x) => {
-            const isValidMove = validMoves.some(([vy, vx]) => vy === y && vx === x);
+            //const isValidMove = validMoves.some(([vy, vx]) => vy === y && vx === x);
             return (
+              // <div className={styles.cell} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
+              //   {color !== 0 ? (
+              //     <div
+              //       className={styles.stone}
+              //       style={{ background: color === 1 ? '#000' : '#fff' }}
+              //     />
+              //   ) : isValidMove ? (
+              //     <div className={styles.shade} />
+              //   ) : null}
+              // </div>
               <div className={styles.cell} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
-                {color !== 0 ? (
+                {color % 3 !== 0 ? (
                   <div
                     className={styles.stone}
                     style={{ background: color === 1 ? '#000' : '#fff' }}
                   />
-                ) : isValidMove ? (
+                ) : color === 3 ? (
                   <div className={styles.shade} />
-                ) : null}
+                ) : (
+                  <div />
+                )}
               </div>
             );
           }),
