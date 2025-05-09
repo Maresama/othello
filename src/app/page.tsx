@@ -3,6 +3,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './page.module.css';
 
+const calcBlackCount = (b: number[][]) => {
+  let black = 0;
+  for (const row of b) {
+    for (const cell of row) {
+      if (cell === 1) black++;
+    }
+  }
+  return black;
+};
+const calcWhiteCount = (b: number[][]) => {
+  let white = 0;
+  for (const row of b) {
+    for (const cell of row) {
+      if (cell === 2) white++;
+    }
+  }
+  return white;
+};
 export default function Home() {
   const [turnColor, setTurnColor] = useState(1);
 
@@ -17,8 +35,8 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const [blackCount, setBlackCount] = useState(2);
-  const [whiteCount, setWhiteCount] = useState(2);
+  const blackCount = calcBlackCount(board);
+  const whiteCount = calcWhiteCount(board);
   const [validMoves, setvalidMoves] = useState<number[][]>([]);
   const [message, setMessage] = useState('');
 
@@ -141,21 +159,8 @@ export default function Home() {
     }
   };
 
-  const updateScore = (b: number[][]) => {
-    let black = 0,
-      white = 0;
-    for (const row of b) {
-      for (const cell of row) {
-        if (cell === 1) black++;
-        if (cell === 2) white++;
-      }
-    }
-    setBlackCount(black);
-    setWhiteCount(white);
-  };
-
   useEffect(() => {
-    updateScore(board); // 得点
+    // 得点
     updatevalidMoves(board, turnColor); // 候補地
   }, [board, turnColor, updatevalidMoves]);
 
